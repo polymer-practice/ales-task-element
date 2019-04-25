@@ -5,18 +5,13 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-  <title>form-task demo</title>
+  <title>task-element demo</title>
 
   <script src="../../webcomponentsjs/webcomponents-loader.js"></script>
 
   <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
   <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
- 
-  <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
   <link rel="import" href="../task-element.html">
-  
-
-
 
   <custom-style>
     <style is="custom-style" include="demo-pages-shared-styles">
@@ -26,11 +21,23 @@
 
 <body>
   <div class="vertical-section-container centered">
-    <h3>Basic form-task demo</h3>
+    <h3>Basic task-element demo</h3>
     <demo-snippet>
       <template>
-        <taskElement taskText="Tarea 1"></taskElement>
+        <task-element id="task1" item-title="Task 1"></task-element>
+        <task-element id="task2" item-title="Task 2" is-done></task-element>
+        <task-element id="task3" item-title="Task 3" is-cancelled></task-element>
       </template>
+      <script>
+        let task1 = document.getElementById('task1');
+        let task2 = document.getElementById('task2');
+        let task3 = document.getElementById('task3');
+        console.log(`
+          Status task 1: ${task1.status}
+          Status task 2: ${task2.status}
+          Status task 3: ${task3.status}
+          `);
+      </script>
     </demo-snippet>
   </div>
 </body>

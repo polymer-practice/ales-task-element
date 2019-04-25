@@ -1,28 +1,45 @@
 <link rel="import" href="../polymer/polymer-element.html">
-<link rel="import" href="../polymer/iron-icon.html">
-<link rel="import" href="../polymer/iron-icons.html">
+<link rel="import" href="../iron-icons/iron-icons.html">
+<link rel="import" href="../iron-icon/iron-icon.html">
+
 
 <dom-module id="task-element">
   <template>
     <style>
       :host {
         display: block;
-        font-size: 15px;
-        font-weight: 300;
-      }
+        --icon-size: var(--icon-size-task-element, 20px);
+        --primary-color: var(--primary-color-task-element, #3f51b5);
+        --secondary-color: var(--secondary-color-task-element, #fff);
 
-      @media (min-width: 600px) {
-       
+      }
+      .element-item-wrapper {
+        align-items: center;
+        display: flex;
+        justify-content: flex-start;
+      }
+      .element-item__title {
+        color: var(--primary-color);
+        margin-left: 5px;
+      }
+      .element-item__bullet{
+        color: var(--primary-color);
+      } 
+      .done{
+        color: green;
+        text-decoration: line-through;
+      }
+      .cancelled{
+        color: red;
+        text-decoration: line-through;
       }
 
     </style>
-
-    <!-- HTML -->
-    <div class="task-wrapper">
-        <p class="task-text">[[taskText]]</p>
+    <div class="element-item-wrapper">
+      <iron-icon icon="icons:radio-button-checked" class="element-item__bullet"></iron-icon>
+      <h3 class$="element-item__title [[status]]">[[itemTitle]] :[[status]]</h3>
     </div>
-    <!-- end HTML -->
-
+    
   </template>
 
   <script>
@@ -38,17 +55,29 @@
       static get is() { return 'task-element'; }
       static get properties() {
         return {
-          taskText: {
+          itemTitle: {
             type: String,
-            value: 'Nombre'
+            value: 'element title'
           },
-          _description: String
-          
+          isDone: {
+            type: Boolean,
+            value: false
+          },
+          isCancelled: {
+            type: Boolean,
+            value: false
+          },
+          status: {
+            type: String,
+            computed: 'setStatus(isDone,isCancelled)'
+          }
         };
       }
-     
+      setStatus( doneFlag,cancelledFlag) {
+        return doneFlag? 'done' : cancelledFlag? 'cancelled' : 'pending';
+      }
     }
-   
+
     window.customElements.define(TaskElement.is, TaskElement);
   </script>
 </dom-module>
