@@ -71,9 +71,9 @@
           <template is="dom-if" if="[[_showDone]]">
             <button type="button" name="doneEvent" on-click="onTaskButtonClick" class="button-task button--done">Done</button>
           </template>
-          <template is="dom-if" if="[[_showCancel]]">
+          <template is="dom-if" if="[[_showCancelled]]">
             <button type="button" name="cancelEvent" on-click="onTaskButtonClick" class="button-task button--cancel">Cancel</button>
-        </template>
+          </template>
       </div>
     </div>
 
