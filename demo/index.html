@@ -24,19 +24,32 @@
     <h3>Basic task-element demo</h3>
     <demo-snippet>
       <template>
-        <task-element id="task1" item-title="Task 1"></task-element>
-        <task-element id="task2" item-title="Task 2" is-done></task-element>
-        <task-element id="task3" item-title="Task 3" is-cancelled></task-element>
+        <task-element id="task1" task-id="1" item-title="Task 1"></task-element>
+        <task-element id="task2" task-id="2" item-title="Task 2" ></task-element>
+        <task-element id="task3" task-id="3" item-title="Task 3"></task-element>
       </template>
       <script>
-        let task1 = document.getElementById('task1');
-        let task2 = document.getElementById('task2');
-        let task3 = document.getElementById('task3');
+        const task1 = document.getElementById('task1');
+        const task2 = document.getElementById('task2');
+        const task3 = document.getElementById('task3');
         console.log(`
           Status task 1: ${task1.status}
           Status task 2: ${task2.status}
           Status task 3: ${task3.status}
           `);
+
+          task1.addEventListener("pendingEvent", (e)=>{console.log("Task status updated to PENDING...")})
+          task1.addEventListener("doneEvent", (e)=>{console.log("Task status updated to DONE...")})
+          task1.addEventListener("cancelEvent", (e)=>{console.log("Task status updated to CANCELLED...")})
+
+          task2.addEventListener("pendingEvent", (e)=>{console.log("Task status updated to PENDING...")})
+          task2.addEventListener("doneEvent", (e)=>{console.log("Task status updated to DONE...")})
+          task2.addEventListener("cancelEvent", (e)=>{console.log("Task status updated to CANCELLED...")})
+
+          task3.addEventListener("pendingEvent", (e)=>{console.log("Task status updated to PENDING...")})
+          task3.addEventListener("doneEvent", (e)=>{console.log("Task status updated to DONE...")})
+          task3.addEventListener("cancelEvent", (e)=>{console.log("Task status updated to CANCELLED...")})
+
       </script>
     </demo-snippet>
   </div>

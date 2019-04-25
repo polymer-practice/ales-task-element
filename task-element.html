@@ -4,42 +4,79 @@
 
 
 <dom-module id="task-element">
-  <template>
+  <template is="dom-if">
     <style>
       :host {
         display: block;
         --icon-size: var(--icon-size-task-element, 20px);
         --primary-color: var(--primary-color-task-element, #3f51b5);
         --secondary-color: var(--secondary-color-task-element, #fff);
-
+        --done-color: var(--primary-color-task-element, green);
+        --width-task: var(--width-task-element, 200px)
       }
+
       .element-item-wrapper {
         align-items: center;
         display: flex;
         justify-content: flex-start;
       }
+
       .element-item__title {
         color: var(--primary-color);
         margin-left: 5px;
       }
-      .element-item__bullet{
+
+      .element-item__bullet {
         color: var(--primary-color);
-      } 
-      .done{
-        color: green;
+      }
+
+      /* TASKS */
+      .done {
+        color: var(--done-color);
         text-decoration: line-through;
       }
-      .cancelled{
+
+      .cancelled {
         color: red;
         text-decoration: line-through;
       }
 
+      /* BUTTONS */
+      .button-task {
+        background: #eee;
+        border-radius: 6px;
+        color: #333;
+        border: 1px solid #ccc;
+        padding: 10px;
+        width: 70px;
+        height: 30px;
+        line-height: 10px;
+      }
+
+      .button-task:hover {
+        background: #ccc;
+        cursor: pointer;
+      }
     </style>
-    <div class="element-item-wrapper">
-      <iron-icon icon="icons:radio-button-checked" class="element-item__bullet"></iron-icon>
-      <h3 class$="element-item__title [[status]]">[[itemTitle]] :[[status]]</h3>
+    <div class="container-task">
+      <div class="element-item-wrapper">
+        <iron-icon icon="icons:radio-button-checked" class="element-item__bullet"></iron-icon>
+        <h3 class$="element-item__title [[status]]">[[itemTitle]] :[[status]]</h3>
+      </div>
+      <div class="buttons-wrapper">
+          <template is="dom-if" if="[[_showPending]]">
+            <button type="button" name="pendingEvent" on-click="onTaskButtonClick"
+            class="button-task button--pending">Pending</button>
+          </template>
+          <template is="dom-if" if="[[_showDone]]">
+            <button type="button" name="doneEvent" on-click="onTaskButtonClick" class="button-task button--done">Done</button>
+          </template>
+          <template is="dom-if" if="[[_showCancel]]">
+            <button type="button" name="cancelEvent" on-click="onTaskButtonClick" class="button-task button--cancel">Cancel</button>
+        </template>
+      </div>
     </div>
-    
+
   </template>
 
   <script>
@@ -55,6 +92,7 @@
       static get is() { return 'task-element'; }
       static get properties() {
         return {
+          taskId: String,
           itemTitle: {
             type: String,
             value: 'element title'
@@ -70,13 +108,63 @@
           status: {
             type: String,
             computed: 'setStatus(isDone,isCancelled)'
+          },
+          _showPending: {
+            type: Boolean,
+            value: false
+          },
+          _showDone: {
+            type: Boolean,
+            value: true
+          },
+          _showCancelled: {
+            type: Boolean,
+            value: true
           }
         };
       }
-      setStatus( doneFlag,cancelledFlag) {
-        return doneFlag? 'done' : cancelledFlag? 'cancelled' : 'pending';
+      setStatus(doneFlag, cancelledFlag) {
+        let result = "task";
+        if (doneFlag){
+          result += " done"
+          this._showPending = true;
+          this._showCancelled = true;
+          this._showDone = false;
+
+        }
+        else if (cancelledFlag){
+          result += " cancelled"
+          this._showPending = true;
+          this._showCancelled = false;
+          this._showDone = true;
+        }
+        else{
+          result += " pending"
+          this._showPending = false;
+          this._showCancelled = true;
+          this._showDone = true;
+        }
+
+        return result;
+        //return doneFlag ? 'done' : cancelledFlag ? 'cancelled' : 'pending';
       }
+      onTaskButtonClick(e) {
+        let eventName = e.target.name;
+        let event = new CustomEvent(
+          eventName, {
+            bubbles: true,
+            composed: true,
+            detail: {
+              taskId: this.key
+            }
+          }
+        )
+        this.dispatchEvent(event)
+      }
+
     }
+
+
 
     window.customElements.define(TaskElement.is, TaskElement);
   </script>
